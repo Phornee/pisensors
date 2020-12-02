@@ -37,12 +37,12 @@ def sensorRead(conn, pin):
 
         if temp_c:
             # print(SENSOR_LOCATION_NAME + " Temperature(C) {}".format(temp_c))
-            sql = "INSERT INTO hometelemetry.measurements VALUES (null, 0, now(), {})".format(temp_c)
+            sql = "INSERT INTO hometelemetry.measurements VALUES (null, 0, UTC_TIMESTAMP(), {})".format(temp_c)
             cursor.execute(sql)
 
         if humidity:
             # print(SENSOR_LOCATION_NAME + " Humidity(%) {}".format(humidity,".2f"))
-            sql = "INSERT INTO hometelemetry.measurements VALUES (null, 1, now(), {})".format(humidity)
+            sql = "INSERT INTO hometelemetry.measurements VALUES (null, 1, UTC_TIMESTAMP(), {})".format(humidity)
             cursor.execute(sql)
 
         conn.commit()
