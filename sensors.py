@@ -1,6 +1,6 @@
 import adafruit_dht
-from DBConn import homeTelemetryDB, DBOpenException
-from ManagedClass import ManagedClass
+from DBConn.DBConn import homeTelemetryDB, DBOpenException
+from ManagedClass.ManagedClass import ManagedClass
 
 class Sensors(ManagedClass):
 
