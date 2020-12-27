@@ -9,7 +9,9 @@ class Sensors(ManagedClass):
         self.homeDB = homeTelemetryDB()
 
     def sensorRead(self):
-        """"""
+        """
+        Read sensors information
+        """
         try:
             conn = self.homeDB.openConn()
             cursor = conn.cursor()
@@ -21,12 +23,12 @@ class Sensors(ManagedClass):
 
             if temp_c:
                 # print(SENSOR_LOCATION_NAME + " Temperature(C) {}".format(temp_c))
-                sql = "INSERT INTO hometelemetry.measurements VALUES (null, 0, UTC_TIMESTAMP(), {})".format(self.config['temp_id'], temp_c)
+                sql = "INSERT INTO hometelemetry.measurements VALUES (null, {}, UTC_TIMESTAMP(), {})".format(self.config['temp_id'], temp_c)
                 cursor.execute(sql)
 
             if humidity:
                 # print(SENSOR_LOCATION_NAME + " Humidity(%) {}".format(humidity,".2f"))
-                sql = "INSERT INTO hometelemetry.measurements VALUES (null, 1, UTC_TIMESTAMP(), {})".format(self.config['humid_id'], humidity)
+                sql = "INSERT INTO hometelemetry.measurements VALUES (null, {}, UTC_TIMESTAMP(), {})".format(self.config['humid_id'], humidity)
                 cursor.execute(sql)
 
             conn.commit()
