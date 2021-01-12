@@ -1,5 +1,5 @@
 import adafruit_dht
-from dbutils import homeTelemetryDB, DBOpenException
+from phorneedbutils import homeTelemetryDB, DBOpenException
 from phorneebaseutils import ManagedClass
 
 class Sensors(ManagedClass):
