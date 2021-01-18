@@ -20,7 +20,7 @@ setuptools.setup(
     ],
     install_requires=[
         'baseutils_phornee>=0.0.3',
-        'dbutils_phornee>0.0.3',
+        'dbutils_phornee>=0.0.3',
         'adafruit-circuitpython-dht>=3.5.1'
     ],
     python_requires='>=3.6',
