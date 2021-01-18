@@ -4,14 +4,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="PiSensors",
+    name="pisensors",
     version="0.0.3",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
-    description="Sensors script for Temperature & Humidity",
+    description="Raspberry Pi Sensors script for Temperature & Humidity",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Phornee/PiSensors",
+    url="https://github.com/Phornee/pisensors",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
