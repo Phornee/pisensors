@@ -1,3 +1,2 @@
-/sensors.log
-/config.yml
 /PiSensors/config.yml
+/PiSensors/log/*.log

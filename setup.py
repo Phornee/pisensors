@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="PiSensors",
-    version="0.0.2",
+    version="0.0.3",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Sensors script for Temperature & Humidity",
@@ -19,8 +19,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'phorneebaseutils>=0.0.2',
-        'phorneedbutils>0.0.1',
+        'baseutils_phornee>=0.0.3',
+        'dbutils_phornee>0.0.3',
         'adafruit-circuitpython-dht>=3.5.1'
     ],
     python_requires='>=3.6',
