@@ -14,13 +14,13 @@ setuptools.setup(
     url="https://github.com/Phornee/pisensors",
     packages=setuptools.find_packages(),
     package_data={
-        # If any package contains *.txt or *.rst files, include them:
         '': ['*.yml'],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Operating System :: POSIX :: Linux",
+        "Topic :: Home Automation"
     ],
     install_requires=[
         'baseutils_phornee>=0.0.3',
