@@ -3,3 +3,4 @@
 /build
 /dist
 /pisensors.egg-info
+/makepypi.bat

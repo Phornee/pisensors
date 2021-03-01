@@ -2,4 +2,11 @@ pin: 2
 temp_id: 0
 humid_id: 1
 logpath: log
-
+mariadbconn:
+  user: ++++++++++
+  password: ++++++++++++
+  host: +++.+++.+++.+++
+  port: ++++
+  database: +++++++++
+mongodbconn:
+  connstring: mongodb+srv://user:urlencodedpassword@cluster0.xxxxx.mongodb.net/defaultdatabase?retryWrites=true&w=majority"
