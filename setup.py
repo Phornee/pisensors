@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pisensors",
-    version="0.1.0",
+    version="0.1.1",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Raspberry Pi Sensors script for Temperature & Humidity",
@@ -24,7 +24,7 @@ setuptools.setup(
     ],
     install_requires=[
         'baseutils_phornee>=0.0.5',
-        'dbutils_phornee>=0.0.4',
+        'influxdb_client>=1.14.0',
         'adafruit-circuitpython-dht>=3.5.1'
     ],
     python_requires='>=3.6',

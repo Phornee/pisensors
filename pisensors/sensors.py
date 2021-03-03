@@ -1,5 +1,6 @@
 import adafruit_dht
-from dbutils_phornee import MariaDBConn
+from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client.client.write_api import SYNCHRONOUS
 from baseutils_phornee import ManagedClass
 from datetime import datetime
 
@@ -7,7 +8,12 @@ class Sensors(ManagedClass):
 
     def __init__(self):
         super().__init__(execpath=__file__)
-        self.homeDB = MariaDBConn()
+
+        token = self.config['influxdbconn']['token']
+        self.org = self.config['influxdbconn']['org']
+        self.bucket = self.config['influxdbconn']['bucket']
+
+        self.conn = InfluxDBClient(url=self.config['influxdbconn']['url'], token=token)
 
     @classmethod
     def getClassName(cls):
@@ -18,22 +24,22 @@ class Sensors(ManagedClass):
         Read sensors information
         """
         try:
-            self.homeDB.openConn(self.config['mariadbconn'])
             dhtSensor = adafruit_dht.DHT22(self.config['pin'])
 
             humidity = dhtSensor.humidity
             temp_c = dhtSensor.temperature
 
-            timestamp = datetime.utcnow()
-
             if temp_c:
-                data = {"sensor_id": self.config['temp_id'], "timestamp": timestamp, "value": temp_c}
-                self.homeDB.insert('measurements', data)
-                # print(SENSOR_LOCATION_NAME + " Temperature(C) {}".format(temp_c))
+                write_api = self.conn.write_api(write_options=SYNCHRONOUS)
 
-            if humidity:
-                data = {"sensor_id": self.config['humid_id'], "timestamp": timestamp, "value": humidity}
-                self.homeDB.insert('measurements', data)
+                point = Point('DHT22') \
+                    .tag('sensorid', self.config['id']) \
+                    .field('temp', temp_c) \
+                    .field('humidity', humidity) \
+                    .time(datetime.utcnow(), WritePrecision.NS)
+
+                write_api.write(self.bucket, self.org, point)
+                # print(SENSOR_LOCATION_NAME + " Temperature(C) {}".format(temp_c))
                 # print(SENSOR_LOCATION_NAME + " Humidity(%) {}".format(humidity,".2f"))
 
         except Exception as e:
