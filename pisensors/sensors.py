@@ -29,18 +29,17 @@ class Sensors(ManagedClass):
             humidity = dhtSensor.humidity
             temp_c = dhtSensor.temperature
 
-            if temp_c:
-                write_api = self.conn.write_api(write_options=SYNCHRONOUS)
+            write_api = self.conn.write_api(write_options=SYNCHRONOUS)
 
-                point = Point('DHT22') \
-                    .tag('sensorid', self.config['id']) \
-                    .field('temp', temp_c) \
-                    .field('humidity', humidity) \
-                    .time(datetime.utcnow(), WritePrecision.NS)
+            point = Point('DHT22') \
+                .tag('sensorid', self.config['id']) \
+                .field('temp', temp_c) \
+                .field('humidity', humidity) \
+                .time(datetime.utcnow(), WritePrecision.NS)
 
-                write_api.write(self.bucket, self.org, point)
-                # print(SENSOR_LOCATION_NAME + " Temperature(C) {}".format(temp_c))
-                # print(SENSOR_LOCATION_NAME + " Humidity(%) {}".format(humidity,".2f"))
+            write_api.write(self.bucket, self.org, point)
+            # print("Temperature(C) {}".format(temp_c))
+            # print("Humidity(%) {}".format(humidity,".2f"))
 
         except Exception as e:
             self.logger.error("RuntimeError: {}".format(e))
