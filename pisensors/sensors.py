@@ -1,12 +1,17 @@
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from baseutils_phornee import ManagedClass
+from baseutils_phornee import Logger
+from baseutils_phornee import Config
 from datetime import datetime
 
 class Sensors(ManagedClass):
 
     def __init__(self):
         super().__init__(execpath=__file__)
+
+        self.logger = Logger({'modulename': self.getClassName(), 'logpath': 'log'})
+        self.config = Config(execpath=__file__)
 
         token = self.config['influxdbconn']['token']
         self.org = self.config['influxdbconn']['org']
