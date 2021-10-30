@@ -1,3 +1,5 @@
 - 0.1.3:
   - https://phornee.atlassian.net/jira/software/projects/PIW/boards/1?selectedIssue=PIW-10
   - Config class used
+- 0.1.4:
+  - Logger class used
