@@ -34,22 +34,28 @@ class Sensors(ManagedClass):
 
                 humidity = dhtSensor.humidity
                 temp_c = dhtSensor.temperature
-
-                write_api = self.conn.write_api(write_options=SYNCHRONOUS)
-
-                point = Point('DHT22') \
-                    .tag('sensorid', self.config['id']) \
-                    .field('temp', temp_c) \
-                    .field('humidity', humidity) \
-                    .time(datetime.utcnow(), WritePrecision.NS)
-
-                write_api.write(self.bucket, self.org, point)
-                self.logger.error("Temp: {} | Humid: {}".format(temp_c, humidity))
-                # print("Temperature(C) {}".format(temp_c))
-                # print("Humidity(%) {}".format(humidity,".2f"))
-
             except Exception as e:
-                self.logger.error("RuntimeError: {}".format(e))
+                self.logger.error("Error reading sensor DHT22: {}".format(e))
+        else:
+                humidity = 50
+                temp_c = 25
+
+        try:
+            write_api = self.conn.write_api(write_options=SYNCHRONOUS)
+
+            point = Point('DHT22') \
+                .tag('sensorid', self.config['id']) \
+                .field('temp', temp_c) \
+                .field('humidity', humidity) \
+                .time(datetime.utcnow(), WritePrecision.NS)
+
+            write_api.write(self.bucket, self.org, point)
+            self.logger.info("Temp: {} | Humid: {}".format(temp_c, humidity))
+
+        except Exception as e:
+            self.logger.error("RuntimeError: {}".format(e))
+            self.logger.error("influxDBURL={} | influxDBToken={}".format(self.config['influxdbconn']['url'],
+                                                                         self.config['influxdbconn']['token']))
 
 if __name__ == "__main__":
     sensors_instance = Sensors()

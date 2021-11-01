@@ -3,3 +3,5 @@
   - Config class used
 - 0.1.4:
   - Logger class used
+- 0.1.4:
+  - More debug info on error. Support for debugging in PC
