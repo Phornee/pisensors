@@ -11,7 +11,7 @@ class Sensors(ManagedClass):
         super().__init__(execpath=__file__)
 
         self.logger = Logger({'modulename': self.getClassName(), 'logpath': 'log'})
-        self.config = Config(execpath=__file__)
+        self.config = Config({'modulename': self.getClassName(), 'execpath': __file__})
 
         token = self.config['influxdbconn']['token']
         self.org = self.config['influxdbconn']['org']

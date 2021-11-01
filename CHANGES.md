@@ -3,5 +3,7 @@
   - Config class used
 - 0.1.4:
   - Logger class used
-- 0.1.4:
+- 0.1.5:
   - More debug info on error. Support for debugging in PC
+- 0.1.6:
+  - Fix bug config
