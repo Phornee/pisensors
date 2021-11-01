@@ -6,4 +6,6 @@
 - 0.1.5:
   - More debug info on error. Support for debugging in PC
 - 0.1.6:
-  - Fix bug config
+  - Fix bug config (homevars folder incorrect)
+- 0.1.7:
+  - Fix bug: Error when DHT22 fails

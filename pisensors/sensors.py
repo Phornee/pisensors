@@ -27,6 +27,8 @@ class Sensors(ManagedClass):
         """
         Read sensors information
         """
+        have_readings = False
+
         if self.is_raspberry_pi():
             try:
                 import adafruit_dht
@@ -34,28 +36,32 @@ class Sensors(ManagedClass):
 
                 humidity = dhtSensor.humidity
                 temp_c = dhtSensor.temperature
+
+                have_readings = True
             except Exception as e:
                 self.logger.error("Error reading sensor DHT22: {}".format(e))
         else:
                 humidity = 50
                 temp_c = 25
+                have_readings = True
 
-        try:
-            write_api = self.conn.write_api(write_options=SYNCHRONOUS)
+        if have_readings:
+            try:
+                write_api = self.conn.write_api(write_options=SYNCHRONOUS)
 
-            point = Point('DHT22') \
-                .tag('sensorid', self.config['id']) \
-                .field('temp', temp_c) \
-                .field('humidity', humidity) \
-                .time(datetime.utcnow(), WritePrecision.NS)
+                point = Point('DHT22') \
+                    .tag('sensorid', self.config['id']) \
+                    .field('temp', temp_c) \
+                    .field('humidity', humidity) \
+                    .time(datetime.utcnow(), WritePrecision.NS)
 
-            write_api.write(self.bucket, self.org, point)
-            self.logger.info("Temp: {} | Humid: {}".format(temp_c, humidity))
+                write_api.write(self.bucket, self.org, point)
+                self.logger.info("Temp: {} | Humid: {}".format(temp_c, humidity))
 
-        except Exception as e:
-            self.logger.error("RuntimeError: {}".format(e))
-            self.logger.error("influxDBURL={} | influxDBToken={}".format(self.config['influxdbconn']['url'],
-                                                                         self.config['influxdbconn']['token']))
+            except Exception as e:
+                self.logger.error("RuntimeError: {}".format(e))
+                self.logger.error("influxDBURL={} | influxDBToken={}".format(self.config['influxdbconn']['url'],
+                                                                             self.config['influxdbconn']['token']))
 
 if __name__ == "__main__":
     sensors_instance = Sensors()
