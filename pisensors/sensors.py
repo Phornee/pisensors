@@ -1,5 +1,6 @@
-from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
+#from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb import InfluxDBClient, client
+#from influxdb_client.client.write_api import SYNCHRONOUS
 from baseutils_phornee import ManagedClass
 from baseutils_phornee import Logger
 from baseutils_phornee import Config
@@ -13,11 +14,12 @@ class Sensors(ManagedClass):
         self.logger = Logger({'modulename': self.getClassName(), 'logpath': 'log'})
         self.config = Config({'modulename': self.getClassName(), 'execpath': __file__})
 
-        token = self.config['influxdbconn']['token']
-        self.org = self.config['influxdbconn']['org']
-        self.bucket = self.config['influxdbconn']['bucket']
+        host = self.config['influxdbconn']['host']
+        user = self.config['influxdbconn']['user']
+        password = self.config['influxdbconn']['password']
+        bucket = self.config['influxdbconn']['bucket']
 
-        self.conn = InfluxDBClient(url=self.config['influxdbconn']['url'], token=token)
+        self.conn = InfluxDBClient(host=host, username=user, password=password, database=bucket)
 
     @classmethod
     def getClassName(cls):
@@ -47,15 +49,23 @@ class Sensors(ManagedClass):
 
         if have_readings:
             try:
-                write_api = self.conn.write_api(write_options=SYNCHRONOUS)
+                #write_api = self.conn.write_api(write_options=SYNCHRONOUS)
 
-                point = Point('DHT22') \
-                    .tag('sensorid', self.config['id']) \
-                    .field('temp', temp_c) \
-                    .field('humidity', humidity) \
-                    .time(datetime.utcnow(), WritePrecision.NS)
+                json_body = [
+                    {
+                        "measurement": "DHT22",
+                        "tags": {
+                            "sensorid": self.config['id']
+                        },
+                        "time": datetime.utcnow(),
+                        "fields": {
+                            "temp": float(temp_c),
+                            "humidity": float(humidity)
+                        }
+                    }
+                ]
+                self.conn.write_points(json_body)
 
-                write_api.write(self.bucket, self.org, point)
                 self.logger.info("Temp: {} | Humid: {}".format(temp_c, humidity))
 
             except Exception as e:
