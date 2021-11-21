@@ -11,3 +11,5 @@
   - Fix bug: Error when DHT22 fails
 - 2.0.0:
   - Interface to influxdb 1.6.4
+- 2.0.1:
+  - Bugfix
