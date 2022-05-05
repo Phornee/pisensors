@@ -13,3 +13,5 @@
   - Interface to influxdb 1.6.4
 - 2.0.1:
   - Bugfix
+- 2.0.2:
+  - config_template.yml changes
