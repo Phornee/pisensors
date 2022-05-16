@@ -15,3 +15,5 @@
   - Bugfix
 - 2.0.2:
   - config_template.yml changes
+- 2.0.4:
+  - support for new logger
