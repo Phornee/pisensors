@@ -1,5 +1,3 @@
-/pisensors/config.yml
-/pisensors/log/*.log
 /build
 /dist
 /pisensors.egg-info
