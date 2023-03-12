@@ -1,1 +1,1 @@
-from .pisensors.sensors import Sensors
+from .pisensors import *

@@ -1,25 +1,22 @@
-#from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb import InfluxDBClient, client
-#from influxdb_client.client.write_api import SYNCHRONOUS
-from baseutils_phornee import ManagedClass
-from baseutils_phornee import Logger
-from baseutils_phornee import Config
-from datetime import datetime
+from influxdb_wrapper import influxdb_factory
+from baseutils_phornee import Logger, Logger_Mode, Config, is_raspberry_pi
+from pathlib import Path
 
-class Sensors(ManagedClass):
+class Sensors():
 
     def __init__(self):
-        super().__init__(execpath=__file__)
+        self.logger = Logger(package_name= self.getClassName(), 
+                            log_file_name='log', 
+                            mode=Logger_Mode.NONE)
 
-        self.logger = Logger({'modulename': self.getClassName(), 'logpath': 'log', 'logname': 'sensors'})
-        self.config = Config({'modulename': self.getClassName(), 'execpath': __file__})
+        self.config = Config(package_name=self.getClassName(), 
+                             template_path='{}/config-template.yml'.format(Path(__file__).parent),
+                             config_file_name='config.yml')
 
-        host = self.config['influxdbconn']['host']
-        user = self.config['influxdbconn']['user']
-        password = self.config['influxdbconn']['password']
-        bucket = self.config['influxdbconn']['bucket']
+        influx_conn_type = self.config['influxdbconn'].get('type', 'influx')
+        self.conn = influxdb_factory(influx_conn_type)
+        self.conn.openConn(self.config['influxdbconn'])
 
-        self.conn = InfluxDBClient(host=host, username=user, password=password, database=bucket)
 
     @classmethod
     def getClassName(cls):
@@ -31,7 +28,7 @@ class Sensors(ManagedClass):
         """
         have_readings = False
 
-        if self.is_raspberry_pi():
+        if is_raspberry_pi():
             try:
                 import adafruit_dht
                 dhtSensor = adafruit_dht.DHT22(self.config['pin'])
@@ -43,30 +40,26 @@ class Sensors(ManagedClass):
             except Exception as e:
                 self.logger.error("Error reading sensor DHT22: {}".format(e))
         else:
-                humidity = 50
+                humidity = 51
                 temp_c = 25
                 have_readings = True
 
         if have_readings:
             try:
-                #write_api = self.conn.write_api(write_options=SYNCHRONOUS)
-
-                json_body = [
+                points = [
                     {
-                        "measurement": "DHT22",
                         "tags": {
                             "sensorid": self.config['id']
                         },
-                        "time": datetime.utcnow(),
                         "fields": {
                             "temp": float(temp_c),
                             "humidity": float(humidity)
                         }
                     }
                 ]
-                self.conn.write_points(json_body)
+                self.conn.insert('DHT22', points)
 
-                self.logger.info("Temp: {} | Humid: {}".format(temp_c, humidity))
+                self.logger.info("Temp: {}°C | Humid: {}%".format(temp_c, humidity))
 
             except Exception as e:
                 self.logger.error("RuntimeError: {}".format(e))
