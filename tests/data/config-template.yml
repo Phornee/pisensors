@@ -1,0 +1,10 @@
+pin: 2
+id: 0
+logpath: log
+influxdbconn:
+  type: mock
+  host: ++++++++++++
+  bucket: hometelemetry
+  user: writer
+  password: +++++++++++++
+

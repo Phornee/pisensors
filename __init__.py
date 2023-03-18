@@ -1,1 +1,2 @@
-from .pisensors.sensors import Sensors
+""" Fake __init__ to redirect to real package"""
+from .pisensors import Sensors
