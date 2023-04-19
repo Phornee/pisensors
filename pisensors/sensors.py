@@ -2,7 +2,9 @@
 import os
 from pathlib import Path
 from influxdb_wrapper import influxdb_factory
-from baseutils_phornee import Logger, Config, is_raspberry_pi
+from baseutils_phornee import is_raspberry_pi
+from log_mgr import Logger
+from config_yml import Config
 
 
 class Sensors():
