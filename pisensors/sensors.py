@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 from influxdb_wrapper import influxdb_factory
-from baseutils_phornee import is_raspberry_pi
 from log_mgr import Logger
 from config_yml import Config
 
@@ -33,22 +32,20 @@ class Sensors():
         """
         have_readings = False
 
-        if is_raspberry_pi():
-            try:
-                import adafruit_dht  # pylint: disable=import-outside-toplevel
+        try:
+            import adafruit_dht  # pylint: disable=import-outside-toplevel
 
-                dht_sensor = adafruit_dht.DHT22(self.config["pin"])
-
-                humidity = dht_sensor.humidity
-                temp_c = dht_sensor.temperature
-
-                have_readings = True
-            except Exception as ex:
-                self.logger.error(f"Error reading sensor DHT22: {ex}")
-        else:
+            dht_sensor = adafruit_dht.DHT22(self.config["pin"])
+            humidity = dht_sensor.humidity
+            temp_c = dht_sensor.temperature
+            have_readings = True
+        except ModuleNotFoundError:
+            self.logger.warning("No adafruit supported: returning default values.")
             humidity = 50
             temp_c = 25
             have_readings = True
+        except Exception as ex:
+            self.logger.error(f"Error reading sensor DHT22: {ex}")
 
         if have_readings:
             try:

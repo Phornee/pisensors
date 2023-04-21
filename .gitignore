@@ -1,1 +1,3 @@
-pisensors/__pycache__
+pisensors/__pycache__/
+__pycache__/
+*.pyc

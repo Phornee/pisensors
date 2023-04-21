@@ -1,19 +1,8 @@
 """ Unit tests """
 import unittest
-import os
-import sys
-import inspect
-import logging
 from pathlib import Path
 
 from pisensors import Sensors
-
-THIS_FOLDER = os.path.dirname(inspect.getfile(inspect.currentframe()))
-
-log = logging.getLogger("pisensors_tests")
-sh = logging.StreamHandler(sys.stdout)
-log.addHandler(sh)
-log.setLevel(logging.INFO)
 
 
 class Testing(unittest.TestCase):
