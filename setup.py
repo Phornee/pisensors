@@ -1,3 +1,4 @@
+""" Setup """
 import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -5,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pisensors",
-    version="0.4.1",
+    version="0.4.2",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Raspberry Pi Sensors script for Temperature & Humidity",
@@ -23,9 +24,9 @@ setuptools.setup(
         "Topic :: Home Automation"
     ],
     install_requires=[
-        'config_yml>=0.2.0',
-        'log_mgr>=0.0.1',
-        'influxdb_wrapper>=0.0.3',
+        'config_yml>=0.3.1',
+        'log_mgr>=0.0.2',
+        'influxdb_wrapper>=0.0.5',
         'adafruit-circuitpython-dht>=3.5.1'
     ],
     python_requires='>=3.6',
