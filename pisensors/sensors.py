@@ -48,7 +48,7 @@ class Sensors():
             humidity = dht_sensor.humidity
             temp_c = dht_sensor.temperature
             have_readings = True
-        except ModuleNotFoundError:
+        except (ModuleNotFoundError, NameError):
             self.logger.warning("No adafruit supported: returning default values.")
             humidity = 50
             temp_c = 25
