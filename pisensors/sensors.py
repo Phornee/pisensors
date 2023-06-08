@@ -1,8 +1,9 @@
 """ Read DHT22 sensors """
 import os
 from pathlib import Path
+import logging
+
 from influxdb_wrapper import influxdb_factory
-from log_mgr import Logger
 from config_yml import Config
 
 
@@ -10,7 +11,7 @@ class Sensors():
     """Read inputs from DHT22 sensors (temperature & humidity) and write it to influx database"""
 
     def __init__(self, template_config_path: str = None, dry_run: bool = False):
-        self.logger = Logger(self.get_class_name(), 'sensors')
+        self.logger = logging.getLogger()
 
         if dry_run:
             dry_run_abs_path = ""
@@ -20,7 +21,7 @@ class Sensors():
         if not template_config_path:
             template_config_path = os.path.join(Path(__file__).parent.resolve(), './config-template.yml')
 
-        self.config = Config(package_name=self.get_class_name(),
+        self.config = Config(package_name=self.class_name(),
                              template_path=template_config_path,
                              config_file_name="config.yml",
                              dry_run=True,
@@ -31,7 +32,7 @@ class Sensors():
         self.conn.open_conn(self.config['influxdbconn'])
 
     @classmethod
-    def get_class_name(cls):
+    def class_name(cls):
         """ Class name """
         return "sensors"
 
@@ -54,7 +55,7 @@ class Sensors():
             temp_c = 25
             have_readings = True
         except RuntimeError as ex:
-            self.logger.error(f"Error reading sensor DHT22: {ex}")
+            self.logger.error("Error reading sensor DHT22: %s", ex)
 
         if have_readings:
             try:
@@ -66,13 +67,9 @@ class Sensors():
                 ]
                 self.conn.insert("DHT22", points)
 
-                self.logger.info(f"Temp: {temp_c} | Humid: {humidity}")
+                self.logger.info("Temp: %s | Humid: %s", temp_c, humidity)
 
             except RuntimeError as ex:
-                self.logger.error(f"RuntimeError: {ex}")
-                self.logger.error(f"influxDB conn={self.config['influxdbconn']}")
+                self.logger.error("RuntimeError: %s", ex)
+                self.logger.error("influxDB conn = %s", self.config['influxdbconn'])
 
-
-if __name__ == "__main__":
-    sensors_instance = Sensors()
-    sensors_instance.sensor_read()

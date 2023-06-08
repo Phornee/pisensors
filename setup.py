@@ -25,7 +25,7 @@ setuptools.setup(
     ],
     install_requires=[
         'config_yml>=0.3.1',
-        'log_mgr>=0.0.2',
+        'log_mgr>=0.1.1',
         'influxdb_wrapper>=0.0.5',
         'adafruit-circuitpython-dht>=3.5.1'
     ],
