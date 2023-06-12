@@ -24,7 +24,7 @@ class Sensors():
         self.config = Config(package_name=self.class_name(),
                              template_path=template_config_path,
                              config_file_name="config.yml",
-                             dry_run=True,
+                             dry_run=dry_run,
                              dry_run_abs_path=dry_run_abs_path)
 
         influx_conn_type = self.config['influxdbconn'].get('type', 'influx')
@@ -45,9 +45,11 @@ class Sensors():
         try:
             import adafruit_dht  # pylint: disable=import-outside-toplevel
 
+            self.logger.debug("Initializing DHT22 sensor...")
             dht_sensor = adafruit_dht.DHT22(self.config["pin"])
             humidity = dht_sensor.humidity
             temp_c = dht_sensor.temperature
+            dht_sensor.exit()
             have_readings = True
         except (ModuleNotFoundError, NameError):
             self.logger.warning("No adafruit supported: returning default values.")
@@ -72,4 +74,3 @@ class Sensors():
             except RuntimeError as ex:
                 self.logger.error("RuntimeError: %s", ex)
                 self.logger.error("influxDB conn = %s", self.config['influxdbconn'])
-
