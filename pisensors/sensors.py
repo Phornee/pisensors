@@ -2,6 +2,7 @@ from influxdb_wrapper import influxdb_factory
 from baseutils_phornee import Logger, Logger_Mode, Config, is_raspberry_pi
 from pathlib import Path
 
+
 class Sensors():
 
     def __init__(self):
@@ -30,7 +31,7 @@ class Sensors():
 
         if is_raspberry_pi():
             try:
-                import adafruit_dht
+                import adafruit_dht  # noqa
                 dhtSensor = adafruit_dht.DHT22(self.config['pin'])
 
                 humidity = dhtSensor.humidity
@@ -40,9 +41,9 @@ class Sensors():
             except Exception as e:
                 self.logger.error("Error reading sensor DHT22: {}".format(e))
         else:
-                humidity = 51
-                temp_c = 25
-                have_readings = True
+            humidity = 50
+            temp_c = 25
+            have_readings = True
 
         if have_readings:
             try:
@@ -63,14 +64,9 @@ class Sensors():
 
             except Exception as e:
                 self.logger.error("RuntimeError: {}".format(e))
-                self.logger.error("influxDBURL={} | influxDBToken={}".format(self.config['influxdbconn']['url'],
-                                                                             self.config['influxdbconn']['token']))
+                self.logger.error("influxDB conn={}".format(self.config['influxdbconn']))
+
 
 if __name__ == "__main__":
     sensors_instance = Sensors()
     sensors_instance.sensorRead()
-
-
-
-
-
