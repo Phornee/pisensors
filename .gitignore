@@ -1,4 +1,3 @@
-/build
-/dist
-/pisensors.egg-info
-/makepypi.bat
+pisensors/__pycache__/
+__pycache__/
+*.pyc
